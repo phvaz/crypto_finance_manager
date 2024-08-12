@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Crypto Portfolio</h2>
+<form action="{{ url_for('add_crypto') }}" method="POST">
+    <input type="text" name="name" placeholder="Crypto Name">
+    <input type="number" step="0.01" name="quantity" placeholder="Quantity">
+    <input type="number" step="0.01" name="price" placeholder="Price">
+    <button type="submit">Add Crypto</button>
+</form>
+<ul>
+    {% for asset in portfolio %}
+        <li>{{ asset.name }}: {{ asset.quantity }} @ ${{ asset.price }} each</li>
+    {% endfor %}
+</ul>
+<h3>Total Value: ${{ total_value }}</h3>
+{% endblock %}
