@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from finance_manager import FinanceManager
 from crypto_manager import CryptoManager
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 app = Flask(__name__)
 finance_manager = FinanceManager('data/transactions.json')
@@ -53,6 +55,21 @@ def delete_crypto(index):
     del crypto_manager.portfolio[index]
     #crypto_manager.portfolio[index]
     return redirect(url_for('portfolio'))
+
+@app.route('/portfolio_chart')
+def portfolio_chart():
+    # Simula alguns dados de exemplo
+    dates = ['2024-01-01', '2024-02-01', '2024-03-01']
+    values = [1000, 1500, 1200]
+    
+    # Cria o gráfico de linha
+    fig = go.Figure(data=[go.Scatter(x=dates, y=values, mode='lines+markers')])
+    
+    # Renderiza o gráfico como um HTML
+    graph_html = fig.to_html(full_html=False)
+    
+    return render_template('portfolio_chart.html', graph_html=graph_html)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
