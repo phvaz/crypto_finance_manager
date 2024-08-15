@@ -10,7 +10,13 @@
 </form>
 <ul>
     {% for asset in portfolio %}
-        <li>{{ asset.name }}: {{ asset.quantity }} @ ${{ asset.price }} each</li>
+        <li>{{ asset.name }}: {{ asset.quantity }} at ${{ asset.price }} each
+            - Total Value: ${{ (asset.quantity * asset.price) | round(2) }}
+            <form action="{{ url_for('delete_crypto', index=loop.index0)}}" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <a href="{{ url_for('edit_crypto', index=loop.index0)}}">Edit</a>
+        </li>
     {% endfor %}
 </ul>
 <h3>Total Value: ${{ total_value }}</h3>

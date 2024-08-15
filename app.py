@@ -28,8 +28,30 @@ def add_transaction():
 @app.route('/add_crypto', methods=['POST'])
 def add_crypto():
     name = request.form.get('name')
-    quantity = float(request.form.get(quantity))
+    quantity = float(request.form.get('quantity'))
     price = float(request.form.get('price'))
+
+    crypto_manager.add_crypto(name, quantity, price)
+
+    return redirect(url_for('portfolio'))
+
+@app.route('/edit_crypto/<int:index>', methods=['GET', 'POST'])
+def edit_crypto(index):
+    if request.method == 'POST':
+        name = request.form.get('name')
+        quantity = float(request.form.get('quantity'))
+        price = float(request.form.get('price'))
+        crypto_manager.portfolio[index] = {'name': name, 'quantity': quantity, 'price': price}
+        crypto_manager.save_portfolio()
+        return redirect(url_for('portfolio'))
+
+    asset = crypto_manager.portfolio[index]
+    return render_template('edit_crypto.html', asset=asset, index=index)
+
+@app.route('/delete_crypto/<int:index>', methods=['POST'])
+def delete_crypto(index):
+    del crypto_manager.portfolio[index]
+    #crypto_manager.portfolio[index]
     return redirect(url_for('portfolio'))
 
 if __name__ == '__main__':
